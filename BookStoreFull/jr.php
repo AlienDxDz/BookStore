@@ -1,0 +1,140 @@
+<?php
+require("db_connection.php");
+session_start();
+
+if (isset($_SESSION["sort"])) {
+  unset($_SESSION["sort"]);
+}
+if (isset($_SESSION["filter"])) {
+            unset($_SESSION["filter"]);
+        }
+
+        if (isset($_SESSION["admin"])) {
+            unset($_SESSION["admin"]);
+        }
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Библиотека</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="css/jr4.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light ">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="main.php">Главная <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="ganre.php">Жанры книг</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="role.php">Роль чтение</a>
+      </li> 
+      <li class="nav-item">
+        <a class="nav-link" href="catalog.php">Книги</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="journal.php">Журналы и газеты</a>
+      </li>
+      <?php
+      if (isset($_SESSION["client"])) {
+      ?>
+      <li class="nav-item">
+    	<a class="nav-link" href="account.php">Кабинет</a>
+      </li>
+      <?php
+      }
+      ?>
+      <?php
+      if (!isset($_SESSION["client"])) {
+      ?>
+      <li class="nav-item">
+    	<a class="nav-link" href="account.php">Вход</a>
+      </li>
+      <?php
+      }
+      ?>
+    </ul>
+  </div>
+</nav>
+
+<?php 
+        if ($_SERVER['REQUEST_METHOD'] == "GET") {
+            $stmt = $pdo->query("SELECT * FROM journals WHERE id = ".$_GET["idBook"]." ");
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        }
+?>
+
+<div class="book">
+  <div class="book-s">
+    <div></div>
+    <div class="img">
+      <img src="<?= $row['url'] ?>">
+    </div>
+    <div class="info">
+      <div>
+        <ul>
+          <li><span>Название: <?= $row['title'] ?></span></li>
+          <li><span>Автор: <?= $row['author'] ?></span></li>
+          <li><span>Издатель: <?= $row['publisher'] ?></span></li>
+          <li><span>Дата публикации: <?= $row['date'] ?></span></li>
+          <li><span>Жанр: <?= $row['genre'] ?></span></li>
+          
+        </ul>
+        
+      </div><br>
+
+      <div class="story">
+        <p>Описание</p>
+        <p><?= $row['description'] ?></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="footer">
+  <div class="word-foot">
+    <div></div>
+    <div class="hrf"><hr></div>
+    <div class=""><b>СВЯЖИТЕСЬ С НАМИ</b></div>
+    <div class="hrf"><hr></div>
+    <div></div>
+  </div>
+  <div class="footer-in">
+    <div class="footer-ini">
+      <div>
+        <img src="icons/icons8-телефон-100.png">
+      </div>
+      <div>
+        <p> +7 (4872) 77-02-07 </p>
+      </div>
+    </div>
+    <div class="email">
+      <p>info@oktavaklaster.ru</p>
+    </div>
+    <div class="media">
+      <div></div>
+      <div><a href="https://www.instagram.com/?hl=ru"><img src="icons/icons8-instagram-208.png"></a></div>
+      <div><a href="https://www.facebook.com/"><img src="icons/icons8-facebook-208.png"></a></div>
+      <div><a href="https://vk.com/feed"><img src="icons/icons8-vk-в-круге-100.png"></a></div>
+      
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>
